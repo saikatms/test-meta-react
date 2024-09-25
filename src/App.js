@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 
-function App() {
+// Home component
+const Home = () => (
+  <div>
+    <h1>Home Page</h1>
+    <nav>
+      <ul>
+        <li><Link to="/page1?seatId=GEYTSORRGM5DG">Go to seat GEYTSORRGM5DG</Link></li>
+        <li><Link to="/page2?seatId=GEYTQORRGQ5DCNI">Go to seat GEYTQORRGQ5DCNI</Link></li>
+      </ul>
+    </nav>
+  </div>
+);
+
+// Page component that displays content from query string
+const Page = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const content = searchParams.get('seatId') || 'No seatId provided';
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Page Content</h1>
+      <p>{content}</p>
+      <Link to="/">Back to Home</Link>
     </div>
   );
-}
+};
+
+// Main App component
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/page1" element={<Page />} />
+        <Route path="/page2" element={<Page />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
